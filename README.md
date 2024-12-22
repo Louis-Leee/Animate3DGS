@@ -1,5 +1,6 @@
 # Animate3DGS
 <b>CV24 Fall Final Project</b>
+
 This is the implementation of our project: [Bringing Static 3D Scenes to Life: Language-Guided Video Diffusion for Dynamic 4D Generation](https://github.com/Louis-Leee/Animate3DGS/images/CV_24FALL_Final_Project.pdf)
 
 The overall pipeline is as follows:
@@ -138,8 +139,38 @@ There are several important tips for this stage.
 ## Stage C: Depth Estimation on Generated Motion Video
 To generate these depth maps, we leverage state-of-the-art monocular depth estimation models, such as [MiDaS](https://arxiv.org/abs/1907.01341), [DPT](https://arxiv.org/abs/2103.13413), or [Depth Any Video](https://arxiv.org/abs/2410.10815).
 
+Please refer to [project page](https://github.com/Nightmare-n/DepthAnyVideo) for more information. 
+
+### Installation
+
+Setting up the environment with conda. With support for the app.
+
+```bash
+git clone https://github.com/Nightmare-n/DepthAnyVideo
+cd DepthAnyVideo
+
+# create env using conda
+conda create -n dav python==3.10
+conda activate dav
+pip install -r requirements.txt
+pip install gradio
+```
+
+### Inference
+- To run inference on an image, use the following command:
+```bash
+python run_infer.py --data_path ./demos/arch_2.jpg --output_dir ./outputs/ --max_resolution 2048
+```
+
+- To run inference on a video, use the following command:
+```bash
+python run_infer.py --data_path ./demos/wooly_mammoth.mp4 --output_dir ./outputs/ --max_resolution 960
+```
+
 ### Acknowledgement
 The implementation of 3dgs segmentation refers to [SAGA (Segment Any 3D GAussians)](https://jumpat.github.io/SAGA/), [GARField](https://github.com/chungmin99/garfield.git), [OmniSeg3D](https://github.com/OceanYing/OmniSeg3D-GS), [Gaussian Splatting](https://github.com/graphdeco-inria/gaussian-splatting).
+
 The implementation of video diffusion refers to [Runway AI]( https://runwayml.com/) and [KLing AI](https://klingai.com/).
+
 The implementation of depth map generation refers to [MiDaS](https://github.com/isl-org/MiDaS), [DPT](https://github.com/isl-org/DPT), and [Depth Any Video](https://github.com/Nightmare-n/DepthAnyVideo).
 We sincerely thank them for their contributions to the community.
