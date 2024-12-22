@@ -173,4 +173,5 @@ The implementation of 3dgs segmentation refers to [SAGA (Segment Any 3D GAussian
 The implementation of video diffusion refers to [Runway AI]( https://runwayml.com/) and [KLing AI](https://klingai.com/).
 
 The implementation of depth map generation refers to [MiDaS](https://github.com/isl-org/MiDaS), [DPT](https://github.com/isl-org/DPT), and [Depth Any Video](https://github.com/Nightmare-n/DepthAnyVideo).
+
 We sincerely thank them for their contributions to the community.
