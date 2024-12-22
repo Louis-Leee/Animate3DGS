@@ -1,10 +1,24 @@
 # Animate3DGS
+<b>CV24 Fall Final Project</b>
+This is the implementation of our project: [Bringing Static 3D Scenes to Life: Language-Guided Video Diffusion for Dynamic 4D Generation](https://github.com/Louis-Leee/Animate3DGS/images/CV_24FALL_Final_Project.pdf)
 
-## SAGA
+The overall pipeline is as follows:
+<div align=center>
+<img src="./images/main-1.png" width="1000px">
+</div>
 
-3D Gaussian Segmentation Implementation Guide
-<!-- The official implementation of [SAGA (Segment Any 3D GAussians)](https://arxiv.org/abs/2312.00860).  -->
-<!-- Please refer to our [project page](https://jumpat.github.io/SAGA/) for more information.  -->
+Basically, we have the following 3 stages in this pipeline:
+
+- A. [Language-embedded 3DGS segmentation](#stage-a-language-embedded-3dgs-segmentation)
+- B. [Motion Video Generation for Trajectory Design](#stage-b-motion-video-generation-for-trajectory-design)
+- C. [Depth Estimation on Generated Motion Video](#stage-c-depth-estimation-on-generated-motion-video)
+
+The detailed implementation guide for each stage is provided below.
+
+<a id="stagea-section"></a>
+## Stage A: Language-embedded 3DGS segmentation
+We imeplement 3DGS segmentation with reference to the official implementation of [SAGA (Segment Any 3D GAussians)](https://arxiv.org/abs/2312.00860).
+Please refer to [project page](https://jumpat.github.io/SAGA/) for more information. 
 <!-- <br> -->
 
 ### Installation
@@ -88,42 +102,6 @@ python saga_gui.py --model_path <path to the pre-trained 3DGS model>
 ```
 Temporarily, open-vocabulary segmentation is only implemented in the jupyter notebook. Please refer to prompt_segmenting.ipynb for detailed instructions.
 
-### GUI Usage:
-After setting up the GUI, you can see the following interface:
-
-<div align=center>
-<img src="./assets/GUI-show.png" width="600px">
-</div>
-
-#### Viewpoint Control:
-- ``left drag``: Rotate.
-- ``mid drag``: Pan.
-- ``right click``: Input point prompt(s) (need to check the segmentation mode first).
-
-#### Segmentation Control:
-
-##### Hyper-parameter option:
-- ``scale``: The 3D scale (used for both segmentation and clustering).
-- ``score thresh``: The segmentation similarity threshold (used for segmentation).
-##### Render option: 
-
-- ``RGB``: Show the original RGB of current 3D-GS model at the specific viewpoint.
-- ``PCA``: Show the PCA decomposition results of 3D features of current 3D-GS model at the specific viewpoint.
-- ``SIMILARITY``: Show the similarity map of given point prompts (need to input prompts first).
-- ``3D CLUSTER``: Show the 3D clustering results of current 3D-GS model.
-
-##### Segmentation Mode option:
-- ``click mode``: Only one point can be input in this mode.
-- ``multi-click mode``: Multiple points can be input in this mode to select many objects simultaneously.
-- ``preview_segmentation_in_2d``: Show the 2D segmentation results with current input prompts (points, scale and score thresh). Note that the 2D segmentation results may be inconsistent with the 3D results.
-
-##### Segmentation option:
-After selecting the interest target(s). You can click ``segment3D`` to get the 3D segmentation results. If the results is not satisfied, you can click ``roll back`` to undo this segmentation or click ``clear`` to roll back to the unsegmented status, or you can continue to input prompts to conduct segmentation based on the temporary segmentation result. You can click ``save as`` to save the current segmentation results in ``./segmentation_res/your_name.pt``, which is a binary mask for all 3D Gaussians in the 3D-GS model.
-
-##### Clustering option:
-At any time, you can click ``cluster3d`` to get the clustering results of the current 3D-GS model. For example, you can directly cluster across the whole scene or cluster in the temporarily segmented objects for decomposition. Click ``reshuffle_cluster_color`` to shuffle the rendering colors of the clusters.
->Note that directly clustering the whole scene may take a while, since we use HDBSCAN without the GPU support for convenience.
-
 ### Rendering
 After saving segmentation results in the interactive GUI or running the scripts in prompt_segmenting.ipynb, the bitmap of the Gaussians will be saved in ``./segmentation_res/your_name.pt`` (you can set the name by yourself). To render the segmentation results on training views (get the segmented object by removing the background), run the following command:
 ```bash
@@ -140,16 +118,28 @@ You can also render the pre-trained 3DGS model without segmentation:
 python render.py -m <path to the pre-trained 3DGS model> --target scene
 ```
 
-### Citation
-If you find this project helpful for your research, please consider citing the report and giving a ⭐.
-```BibTex
-@article{cen2023saga,
-      title={Segment Any 3D Gaussians}, 
-      author={Jiazhong Cen and Jiemin Fang and Chen Yang and Lingxi Xie and Xiaopeng Zhang and Wei Shen and Qi Tian},
-      year={2023},
-      journal={arXiv preprint arXiv:2312.00860},
-}
-```
+<a id="stageb-section"></a>
+## Stage B: Motion Video Generation for Trajectory Design
+We explored three methods that are optimized for generating moving objects video specifically. The results are the following.
+<div align=center>
+<img src="./images/text2video.png" width="800px">
+</div>
+
+All of them have the same issue, weak capability of doing zero-shot tasks. Eventually, we decided to use the commercial diffusional model based video generation model, [Runway AI]( https://runwayml.com/) and [KLing AI](https://klingai.com/). 
+
+Both of them are able to achieve exactly equivalently well results. The only difference is that Runway AI is significantly faster than KLing AI for the same task, usually 10 seconds vs 10 minutes. So Runway AI is preferred. 
+There are several important tips for this stage.
+
+- Use two images as inputs instead of only one images, using the images of the initial position and the ending position as the first and last frames.
+- The condition provided must follow the rules in the physics worlds.
+- The prompt format should follow ”object+action” instead of "action+subject".
+
+<a id="stagec-section"></a>
+## Stage C: Depth Estimation on Generated Motion Video
+To generate these depth maps, we leverage state-of-the-art monocular depth estimation models, such as [MiDaS](https://arxiv.org/abs/1907.01341), [DPT](https://arxiv.org/abs/2103.13413), or [Depth Any Video](https://arxiv.org/abs/2410.10815).
 
 ### Acknowledgement
-The implementation of saga refers to [GARField](https://github.com/chungmin99/garfield.git), [OmniSeg3D](https://github.com/OceanYing/OmniSeg3D-GS), [Gaussian Splatting](https://github.com/graphdeco-inria/gaussian-splatting), and we sincerely thank them for their contributions to the community.
+The implementation of 3dgs segmentation refers to [SAGA (Segment Any 3D GAussians)](https://jumpat.github.io/SAGA/), [GARField](https://github.com/chungmin99/garfield.git), [OmniSeg3D](https://github.com/OceanYing/OmniSeg3D-GS), [Gaussian Splatting](https://github.com/graphdeco-inria/gaussian-splatting).
+The implementation of video diffusion refers to [Runway AI]( https://runwayml.com/) and [KLing AI](https://klingai.com/).
+The implementation of depth map generation refers to [MiDaS](https://github.com/isl-org/MiDaS), [DPT](https://github.com/isl-org/DPT), and [Depth Any Video](https://github.com/Nightmare-n/DepthAnyVideo).
+We sincerely thank them for their contributions to the community.
