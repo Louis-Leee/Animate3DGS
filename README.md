@@ -119,6 +119,11 @@ You can also render the pre-trained 3DGS model without segmentation:
 python render.py -m <path to the pre-trained 3DGS model> --target scene
 ```
 
+### Example Demo
+<div align=center>
+<img src="./images/3dgs-1.png" width="800px">
+</div>
+
 <a id="stageb-section"></a>
 ## Stage B: Motion Video Generation for Trajectory Design
 We explored three methods that are optimized for generating moving objects video specifically. The results are the following.
@@ -134,6 +139,11 @@ There are several important tips for this stage.
 - Use two images as inputs instead of only one images, using the images of the initial position and the ending position as the first and last frames.
 - The condition provided must follow the rules in the physics worlds.
 - The prompt format should follow ”object+action” instead of "action+subject".
+
+### Example Demo
+<div align=center>
+<img src="./images/runway.gif" width="600px">
+</div>
 
 <a id="stagec-section"></a>
 ## Stage C: Depth Estimation on Generated Motion Video
@@ -166,6 +176,11 @@ python run_infer.py --data_path ./demos/arch_2.jpg --output_dir ./outputs/ --max
 ```bash
 python run_infer.py --data_path ./demos/wooly_mammoth.mp4 --output_dir ./outputs/ --max_resolution 960
 ```
+
+### Example Demo
+<div align=center>
+<img src="./images/1.gif" width="600px">
+</div>
 
 ### Acknowledgement
 The implementation of 3dgs segmentation refers to [SAGA (Segment Any 3D GAussians)](https://jumpat.github.io/SAGA/), [GARField](https://github.com/chungmin99/garfield.git), [OmniSeg3D](https://github.com/OceanYing/OmniSeg3D-GS), [Gaussian Splatting](https://github.com/graphdeco-inria/gaussian-splatting).
