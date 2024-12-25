@@ -1,0 +1,27 @@
+ftfy
+regex
+tqdm
+torch~=1.7.1
+torchvision~=0.8.2
+pytorch_transformers
+imageio
+lmdb
+nltk
+matplotlib
+scikit-image
+IPython
+ffmpeg
+decord
+lpips==0.1
+opencv-python
+tensorboardX
+tensorflow-gpu==2.5.0
+opencv-python==4.5.5.64
+omegaconf==2.1.1
+einops==0.3.0
+-e git+https://github.com/CompVis/latent-diffusion.git@main#egg=latent-diffusion --config-settings editable_mode=compat
+pytorch-lightning==1.4.2
+torchmetrics==0.5.0
+spacy==3.6.0
+taming-transformers-rom1504
+

@@ -1,0 +1,14 @@
+pretrained_model_name_or_path: "runwayml/stable-diffusion-v1-5"
+output_dir: "./outputs/sthv2bridge_seer"
+resolution: 256
+num_workers: 16
+num_frames: 16 #sthv2 = (12 or 16), bridgedata = 16, epickitchen = (12 or 16)
+
+seed: 0
+revision: null
+num_samples: 4 #number of samples for each video clip
+scale: 7.5 #sample conditional scale
+ddim_steps: 30 #number of ddim sampling steps
+n_rows: 1 #rows in gif (rows <= total batch size)
+mixed_precision: "fp16" #choices=["no", "fp16", "bf16"]
+saved_global_step: 80000 # saved global steps of checkpoint folder
