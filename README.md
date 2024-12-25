@@ -19,58 +19,17 @@ The detailed implementation guide for each stage is provided below.
 <a id="stagea-section"></a>
 ## Stage A: Language-embedded 3DGS segmentation
 We imeplement 3DGS segmentation with reference to the official implementation of [SAGA (Segment Any 3D GAussians)](https://arxiv.org/abs/2312.00860).
-Please refer to [project page](https://jumpat.github.io/SAGA/) for more information. 
+Please refer to [language_embedded_3DGS](https://github.com/Louis-Leee/Animate3DGS/tree/main/Language_embedded_3DGS) for more information. 
 <!-- <br> -->
 
-### Installation
-The installation of SAGA is similar to [3D Gaussian Splatting](https://github.com/graphdeco-inria/gaussian-splatting).
-```bash
-git clone git@github.com:Jumpat/SegAnyGAussians.git
-```
-or
-```bash
-git clone https://github.com/Jumpat/SegAnyGAussians.git
-```
-Then install the dependencies:
+
+First, install the dependencies:
 ```bash
 conda env create --file environment.yml
 conda activate gaussian_splatting
 ```
 In default, we use the public ViT-H model for SAM. You can download the pre-trained model from [here](https://dl.fbaipublicfiles.com/segment_anything/sam_vit_h_4b8939.pth) and put it under ./third_party/segment-anything/sam_ckpt.
 
-### Prepare Data
-
-The used datasets are [360_v2](https://jonbarron.info/mipnerf360/), [nerf_llff_data](https://drive.google.com/drive/folders/14boI-o5hGO9srnWaaogTU5_ji7wkX2S7) and [LERF](https://drive.google.com/drive/folders/1vh0mSl7v29yaGsxleadcj-LCZOE_WEWB?usp=sharing).
-
-The data structure of SAGA is shown as follows:
-```
-./data
-    /360_v2
-        /garden
-            /images
-            /images_2
-            /images_4
-            /images_8
-            /sparse
-            /features
-            /sam_masks
-            /mask_scales
-        ...
-    /nerf_llff_data
-        /fern
-            /images
-            /poses_bounds.npy
-            /sparse
-            /features
-            /sam_masks
-            /mask_scales
-        /horns
-            ...
-        ...
-    /lerf_data
-        ...
-```
-Since we need the pre-trained 3D-GS model for mask scales extraction, the first step is to train the 3D Gaussians:
 
 ### Pre-train the 3D Gaussians
 We inherit all attributes from 3DGS, more information about training the Gaussians can be found in their repo.
