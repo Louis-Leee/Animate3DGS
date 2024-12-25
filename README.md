@@ -104,7 +104,7 @@ There are several important tips for this stage.
 <img src="./images/runway.gif" width="600px">
 </div>
 
-The sources code of methods we tried can be found in the file [motion video method]. The final generated result can be found in the google drive https://drive.google.com/drive/folders/10VHhwZ4RnGIvJjm_OQ-MOkmij5cHy1Lv?usp=drive_link.
+The sources code of methods we tried can be found in the file "motion video method". The final generated result can be found in the google drive https://drive.google.com/drive/folders/10VHhwZ4RnGIvJjm_OQ-MOkmij5cHy1Lv?usp=drive_link.
 
 <a id="stagec-section"></a>
 ## Stage C: Depth Estimation on Generated Motion Video
